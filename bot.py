@@ -31,7 +31,7 @@ def get_sheet():
     return sheet
 
 def ensure_headers(sheet):
-    headers = ["Дата", "Бренд", "Model Name", "Version Name", "Цвет", "Model Year", "Year", "Цена завода", "FOB Хоргос"]
+    headers = ["Дата", "Бренд", "Model Name", "Version Name", "Цвет", "Model Year", "Year", "Цена завода", "FOB Хоргос +5%"]
     first_row = sheet.row_values(1)
     if first_row != headers:
         sheet.insert_row(headers, 1)
@@ -51,6 +51,13 @@ def write_to_sheet(sheet, rows):
         model_year = row.get("model_year", "") or extract_year(version)
         year = row.get("year", "") or model_year
 
+        # FOB + 5% округлённый до сотен
+        try:
+            fob_num = float(str(row.get("price_fob", "0")).replace(",", "").replace(" ", "").replace("$", ""))
+            fob_plus = round(fob_num * 1.05 / 100) * 100
+        except:
+            fob_plus = ""
+
         data.append([
             today,
             row.get("brand", ""),
@@ -60,7 +67,7 @@ def write_to_sheet(sheet, rows):
             model_year,
             year,
             row.get("price_cny", ""),
-            row.get("price_fob", ""),
+            fob_plus,
         ])
     sheet.append_rows(data, value_input_option="USER_ENTERED")
     return len(data)
