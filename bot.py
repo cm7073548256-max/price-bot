@@ -1,4 +1,4 @@
-# v2.0
+# v2.1
 import os
 import json
 import base64
@@ -32,7 +32,7 @@ def get_sheet():
     return sheet
 
 def ensure_headers(sheet):
-    headers = ["Дата", "Бренд", "Model Name", "Version Name", "Цвет", "Model Year", "Year", "Цена завода", "FOB Хоргос +5%"]
+    headers = ["Дата", "Бренд", "Model Name", "Version Name", "Цвет", "Model Year", "Year", "Цена завода", "FOB Хоргос"]
     first_row = sheet.row_values(1)
     if first_row != headers:
         sheet.insert_row(headers, 1)
